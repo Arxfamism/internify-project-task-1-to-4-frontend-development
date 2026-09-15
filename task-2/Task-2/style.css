@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+
+    background: linear-gradient(
+        135deg,
+        #0b1020,
+        #171d38,
+        #0b1020
+    );
+
+    color: white;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+/* Header */
+
+header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.task {
+    color: #7d8cff;
+    font-weight: bold;
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #aeb5ca;
+    font-size: 18px;
+}
+
+
+/* Billing Toggle */
+
+.billing-toggle {
+    display: inline-flex;
+    background: #202743;
+    padding: 5px;
+    border-radius: 12px;
+    margin-top: 25px;
+}
+
+.billing-toggle button {
+    border: none;
+    background: transparent;
+    color: #c5c9dc;
+    padding: 12px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.billing-toggle button.active {
+    background: #6877ff;
+    color: white;
+}
+
+.billing-toggle span {
+    color: #9ff0c1;
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+
+/* Filters */
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.filter {
+    border: none;
+    padding: 11px 22px;
+    border-radius: 10px;
+
+    background: #202743;
+    color: white;
+
+    cursor: pointer;
+}
+
+.filter.active {
+    background: #6877ff;
+}
+
+
+/* Cards */
+
+.pricing-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+
+    background: #191f39;
+
+    border: 1px solid #303957;
+
+    border-radius: 20px;
+
+    padding: 30px 22px;
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+
+    border-color: #7180ff;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.3);
+}
+
+
+/* Popular */
+
+.popular {
+    border: 2px solid #6877ff;
+
+    transform: translateY(-8px);
+}
+
+.popular-label {
+    position: absolute;
+
+    top: -13px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: #6877ff;
+
+    padding: 7px 14px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+
+/* Card Content */
+
+.icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.card h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #a1a8bd;
+    line-height: 1.5;
+
+    min-height: 70px;
+}
+
+
+/* Price */
+
+.price {
+    margin: 22px 0;
+
+    font-size: 20px;
+}
+
+.amount {
+    font-size: 43px;
+    font-weight: bold;
+}
+
+.price small {
+    color: #949caf;
+}
+
+
+/* Features */
+
+.card ul {
+    list-style: none;
+
+    border-top:
+        1px solid #303957;
+
+    padding-top: 18px;
+}
+
+.card li {
+    margin: 13px 0;
+
+    color: #d6d9e5;
+
+    font-size: 14px;
+}
+
+
+/* Button */
+
+.choose {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 13px;
+
+    border: 1px solid #6877ff;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.choose:hover {
+    background: #6877ff;
+    transform: scale(1.03);
+}
+
+
+/* Toast */
+
+#toast {
+    position: fixed;
+
+    bottom: 25px;
+    left: 50%;
+
+    transform:
+        translate(-50%, 80px);
+
+    opacity: 0;
+
+    background: #242b4a;
+
+    border: 1px solid #6877ff;
+
+    padding: 14px 20px;
+
+    border-radius: 10px;
+
+    transition: 0.3s;
+}
+
+#toast.show {
+    transform:
+        translate(-50%, 0);
+
+    opacity: 1;
+}
+
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+
+    .pricing-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 25px 15px;
+    }
+
+    h1 {
+        font-size: 34px;
+    }
+
+    .pricing-container {
+        grid-template-columns: 1fr;
+    }
+
+    .popular {
+        transform: none;
+    }
+
+    .billing-toggle {
+        width: 100%;
+    }
+
+    .billing-toggle button {
+        flex: 1;
+    }
+
+}
