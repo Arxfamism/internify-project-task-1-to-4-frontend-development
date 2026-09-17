@@ -7,44 +7,92 @@ const recent = document.getElementById("recent");
 const recentWrap = document.getElementById("recentWrap");
 const clear = document.getElementById("clear");
 
+const API_URL =
+    "https://raw.githubusercontent.com/mledoze/countries/master/countries.json";
+
+let countriesData = [];
 let searches = JSON.parse(
     localStorage.getItem("task4Recent") || "[]"
 );
 
 
-// Recent searches show
+// Load country data
+async function loadCountries() {
+
+    try {
+
+        loading.classList.add("show");
+
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            throw new Error("Data loading failed");
+        }
+
+        countriesData = await response.json();
+
+        searchCountry("Pakistan");
+
+    } catch (error) {
+
+        console.error(error);
+
+        result.innerHTML = `
+            <div class="empty">
+                ❌ Country data load nahi ho saka.
+                Internet connection check karein.
+            </div>
+        `;
+
+        document.getElementById("error").textContent =
+            "Unable to load live country data.";
+
+    } finally {
+
+        loading.classList.remove("show");
+
+    }
+}
+
+
+// Recent searches display
 function renderRecent() {
 
     recent.innerHTML = "";
 
     recentWrap.style.display =
-        searches.length > 0 ? "block" : "none";
+        searches.length ? "block" : "none";
 
-    searches.forEach(function (country) {
+    searches.forEach(function (name) {
 
         const button = document.createElement("button");
 
-        button.textContent = country;
         button.type = "button";
+        button.textContent = name;
 
         button.addEventListener("click", function () {
-            query.value = country;
-            searchCountry(country);
+
+            query.value = name;
+            searchCountry(name);
+
         });
 
         recent.appendChild(button);
 
     });
+
 }
 
 
-// Save recent search
-function saveRecent(country) {
+// Save recent searches
+function saveRecent(name) {
 
     searches = [
-        country,
+        name,
         ...searches.filter(function (item) {
-            return item.toLowerCase() !== country.toLowerCase();
+
+            return item.toLowerCase() !== name.toLowerCase();
+
         })
     ].slice(0, 3);
 
@@ -54,86 +102,118 @@ function saveRecent(country) {
     );
 
     renderRecent();
+
 }
 
 
-// Format population
+// Format number
 function formatNumber(number) {
+
     return new Intl.NumberFormat().format(number || 0);
+
 }
 
 
 // Search country
-async function searchCountry(countryName) {
+function searchCountry(searchText) {
 
-    const country = countryName.trim();
+    const search = searchText.trim().toLowerCase();
 
-    if (!country) {
-        error.textContent = "Please enter a country name.";
+    if (!search) {
+
+        error.textContent =
+            "Please enter a country name.";
+
         return;
+
+    }
+
+    if (!countriesData.length) {
+
+        error.textContent =
+            "Country data is still loading.";
+
+        return;
+
     }
 
     error.textContent = "";
     result.innerHTML = "";
+
     loading.classList.add("show");
+
 
     try {
 
-        const apiURL =
-            "https://restcountries.com/v3.1/name/" +
-            encodeURIComponent(country);
+        const country = countriesData.find(function (item) {
 
-        const response = await fetch(apiURL);
+            const common =
+                item.name?.common?.toLowerCase() || "";
 
-        if (!response.ok) {
+            const official =
+                item.name?.official?.toLowerCase() || "";
+
+            return (
+                common === search ||
+                official === search ||
+                common.includes(search)
+            );
+
+        });
+
+
+        if (!country) {
+
             throw new Error("Country not found");
+
         }
 
-        const countries = await response.json();
-
-        if (!Array.isArray(countries) || countries.length === 0) {
-            throw new Error("No country data");
-        }
-
-        const data = countries[0];
 
         const name =
-            data.name?.common || country;
+            country.name?.common || "Not available";
 
         const official =
-            data.name?.official || "Not available";
+            country.name?.official || "Not available";
 
         const capital =
-            data.capital?.[0] || "Not available";
+            country.capital?.[0] || "Not available";
 
         const region =
-            data.region || "Not available";
+            country.region || "Not available";
 
         const subregion =
-            data.subregion || "Not available";
+            country.subregion || "Not available";
 
         const population =
-            data.population || 0;
+            country.population || 0;
 
-        const currency =
-            data.currencies
-                ? Object.entries(data.currencies)
-                    .map(function ([code, value]) {
-                        return `${value.name} (${code})`;
-                    })
-                    .join(", ")
-                : "Not available";
 
-        const languages =
-            data.languages
-                ? Object.values(data.languages).join(", ")
-                : "Not available";
+        const currency = country.currencies
+            ? Object.entries(country.currencies)
+                .map(function ([code, value]) {
+
+                    return `${value.name} (${code})`;
+
+                })
+                .join(", ")
+            : "Not available";
+
+
+        const languages = country.languages
+            ? Object.values(country.languages).join(", ")
+            : "Not available";
+
 
         const flag =
-            data.flags?.png || "";
+            country.flags?.png ||
+            country.flags?.svg ||
+            "";
 
-        const map =
-            data.maps?.googleMaps || "#";
+
+        const mapURL =
+            country.latlng?.length >= 2
+                ? `https://www.google.com/maps/search/?api=1&query=${country.latlng[0]},${country.latlng[1]}`
+                : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
 
 
         result.innerHTML = `
@@ -190,7 +270,7 @@ async function searchCountry(countryName) {
 
                     <a
                         class="map"
-                        href="${map}"
+                        href="${mapURL}"
                         target="_blank"
                         rel="noopener"
                     >
@@ -203,21 +283,25 @@ async function searchCountry(countryName) {
 
         `;
 
+
         saveRecent(name);
+
 
     } catch (err) {
 
-        console.error("API Error:", err);
+        console.error(err);
 
         result.innerHTML = `
+
             <div class="empty">
                 😕 No country found.
                 Please try another name.
             </div>
+
         `;
 
         error.textContent =
-            "API error. Please try again.";
+            "Country not found. Try Pakistan, India or Turkey.";
 
     } finally {
 
@@ -238,7 +322,7 @@ form.addEventListener("submit", function (event) {
 });
 
 
-// Clear recent searches
+// Clear recent
 clear.addEventListener("click", function () {
 
     searches = [];
@@ -250,9 +334,6 @@ clear.addEventListener("click", function () {
 });
 
 
-// Initial setup
+// Start
 renderRecent();
-
-
-// Automatically load Pakistan
-searchCountry("Pakistan");
+loadCountries();
