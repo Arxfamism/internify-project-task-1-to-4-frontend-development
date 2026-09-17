@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Pricing Plans</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">INTERNIFY • FRONTEND TASK 2</p>
+      <h1>Choose the right plan for you</h1>
+      <p class="subtitle">Simple pricing, flexible plans, and interactive controls.</p>
+
+      <div class="billing-box" aria-label="Billing period">
+        <span>Monthly</span>
+        <button id="billingToggle" class="toggle" type="button" aria-pressed="false">
+          <span class="toggle-knob"></span>
+        </button>
+        <span>Yearly <b class="save">Save 20%</b></span>
+      </div>
+    </header>
+
+    <section class="filters" aria-label="Plan filters">
+      <button class="filter active" data-filter="all" type="button">All</button>
+      <button class="filter" data-filter="basic" type="button">Basic</button>
+      <button class="filter" data-filter="premium" type="button">Premium</button>
+    </section>
+
+    <section id="plans" class="plans">
+      <article class="plan-card" data-category="basic">
+        <div class="icon">🌱</div>
+        <h2>Starter</h2>
+        <p class="description">For beginners starting their digital journey.</p>
+        <div class="price"><span class="currency">$</span><span class="amount" data-monthly="9" data-yearly="86">9</span><span class="period">/month</span></div>
+        <ul>
+          <li>✓ 1 Project</li>
+          <li>✓ Basic Support</li>
+          <li>✓ 5 GB Storage</li>
+          <li>✓ Basic Analytics</li>
+        </ul>
+        <button class="choose-btn" data-plan="Starter" type="button">Choose Starter</button>
+      </article>
+
+      <article class="plan-card" data-category="basic">
+        <div class="icon">🚀</div>
+        <h2>Basic Pro</h2>
+        <p class="description">For small teams and growing projects.</p>
+        <div class="price"><span class="currency">$</span><span class="amount" data-monthly="19" data-yearly="182">19</span><span class="period">/month</span></div>
+        <ul>
+          <li>✓ 5 Projects</li>
+          <li>✓ Priority Support</li>
+          <li>✓ 25 GB Storage</li>
+          <li>✓ Advanced Analytics</li>
+        </ul>
+        <button class="choose-btn" data-plan="Basic Pro" type="button">Choose Basic Pro</button>
+      </article>
+
+      <article class="plan-card popular" data-category="premium">
+        <div class="popular-badge">MOST POPULAR</div>
+        <div class="icon">⭐</div>
+        <h2>Professional</h2>
+        <p class="description">Powerful tools for professional users.</p>
+        <div class="price"><span class="currency">$</span><span class="amount" data-monthly="39" data-yearly="374">39</span><span class="period">/month</span></div>
+        <ul>
+          <li>✓ Unlimited Projects</li>
+          <li>✓ 24/7 Support</li>
+          <li>✓ 100 GB Storage</li>
+          <li>✓ Premium Analytics</li>
+        </ul>
+        <button class="choose-btn" data-plan="Professional" type="button">Choose Professional</button>
+      </article>
+
+      <article class="plan-card" data-category="premium">
+        <div class="icon">💎</div>
+        <h2>Enterprise</h2>
+        <p class="description">Complete solutions for large businesses.</p>
+        <div class="price"><span class="currency">$</span><span class="amount" data-monthly="79" data-yearly="758">79</span><span class="period">/month</span></div>
+        <ul>
+          <li>✓ Unlimited Everything</li>
+          <li>✓ Dedicated Support</li>
+          <li>✓ 1 TB Storage</li>
+          <li>✓ Custom Reports</li>
+        </ul>
+        <button class="choose-btn" data-plan="Enterprise" type="button">Choose Enterprise</button>
+      </article>
+    </section>
+
+    <p id="emptyMessage" class="empty" hidden>No plans found.</p>
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
